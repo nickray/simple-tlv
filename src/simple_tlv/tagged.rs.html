@@ -172,7 +172,7 @@
     <span class="ident">value</span>: <span class="ident">V</span>,
 }
 
-<span class="doccomment">/// Raw SIMPLE-TLV data object: TaggedValue with Slice as value.</span>
+<span class="doccomment">/// Raw SIMPLE-TLV data object `TaggedValue&lt;Slice&lt;&#39;_&gt;&gt;`.</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">TaggedSlice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">TaggedValue</span><span class="op">&lt;</span><span class="ident">Slice</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> <span class="ident">TaggedValue</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>
