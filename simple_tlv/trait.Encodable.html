@@ -6,7 +6,7 @@
 <div class="item-spacer"></div>    fn <a href="#tymethod.encode" class="fnname">encode</a>(&amp;self, encoder: &amp;mut <a class="struct" href="../simple_tlv/struct.Encoder.html" title="struct simple_tlv::Encoder">Encoder</a>&lt;'_&gt;) -&gt; <a class="type" href="../simple_tlv/type.Result.html" title="type simple_tlv::Result">Result</a>&lt;()&gt;;
 
     fn <a href="#method.encode_to_slice" class="fnname">encode_to_slice</a>&lt;'a&gt;(&amp;self, buf: &amp;'a mut [u8]) -&gt; <a class="type" href="../simple_tlv/type.Result.html" title="type simple_tlv::Result">Result</a>&lt;&amp;'a [u8]&gt; { ... }
-}</pre></div><div class="docblock"><p>Encoding trait</p>
+}</pre></div><div class="docblock"><p>Encoding trait.</p>
 <p>Encode into encoder, which essentially is a mutable slice of bytes.</p>
 <p>Additionally, the encoded length needs to be known without actually encoding.</p>
 </div><h2 id="required-methods" class="small-section-header">Required methods<a href="#required-methods" class="anchor"></a></h2><div class="methods"><h3 id="tymethod.encoded_length" class="method"><code>fn <a href="#tymethod.encoded_length" class="fnname">encoded_length</a>(&amp;self) -&gt; <a class="type" href="../simple_tlv/type.Result.html" title="type simple_tlv::Result">Result</a>&lt;<a class="struct" href="../simple_tlv/struct.Length.html" title="struct simple_tlv::Length">Length</a>&gt;</code><a class="srclink" href="../src/simple_tlv/traits.rs.html#55" title="goto source code">[src]</a></h3><div class="docblock"><p>Compute the length of this value in bytes when encoded as SIMPLE-TLV</p>

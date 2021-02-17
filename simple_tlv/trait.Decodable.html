@@ -5,7 +5,7 @@
     fn <a href="#tymethod.decode" class="fnname">decode</a>(decoder: &amp;mut <a class="struct" href="../simple_tlv/struct.Decoder.html" title="struct simple_tlv::Decoder">Decoder</a>&lt;'a&gt;) -&gt; <a class="type" href="../simple_tlv/type.Result.html" title="type simple_tlv::Result">Result</a>&lt;Self&gt;;
 
     fn <a href="#method.from_bytes" class="fnname">from_bytes</a>(bytes: &amp;'a [u8]) -&gt; <a class="type" href="../simple_tlv/type.Result.html" title="type simple_tlv::Result">Result</a>&lt;Self&gt; { ... }
-}</pre></div><div class="docblock"><p>Decoding trait:</p>
+}</pre></div><div class="docblock"><p>Decoding trait.</p>
 <p>Decode out of decoder, which essentially is a slice of bytes.</p>
 <p>One way to implement this trait is to implement <code>TryFrom&lt;TaggedSlice&lt;'_&gt;, Error = Error&gt;</code>.</p>
 </div><h2 id="required-methods" class="small-section-header">Required methods<a href="#required-methods" class="anchor"></a></h2><div class="methods"><h3 id="tymethod.decode" class="method"><code>fn <a href="#tymethod.decode" class="fnname">decode</a>(decoder: &amp;mut <a class="struct" href="../simple_tlv/struct.Decoder.html" title="struct simple_tlv::Decoder">Decoder</a>&lt;'a&gt;) -&gt; <a class="type" href="../simple_tlv/type.Result.html" title="type simple_tlv::Result">Result</a>&lt;Self&gt;</code><a class="srclink" href="../src/simple_tlv/traits.rs.html#27" title="goto source code">[src]</a></h3><div class="docblock"><p>Attempt to decode this message using the provided decoder.</p>
