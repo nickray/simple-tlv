@@ -566,6 +566,10 @@
 <span id="563">563</span>
 <span id="564">564</span>
 <span id="565">565</span>
+<span id="566">566</span>
+<span id="567">567</span>
+<span id="568">568</span>
+<span id="569">569</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// pub use der::{Decodable, Encodable};</span>
 <span class="doccomment">//! Trait definitions</span>
@@ -583,7 +587,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)]</span>
 <span class="kw">use</span> {
     <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>,
-    <span class="kw">crate</span>::{<span class="ident">Error</span>, <span class="ident">ErrorKind</span>},
+    <span class="kw">crate</span>::<span class="ident">ErrorKind</span>,
 };
 
 <span class="doccomment">/// Decoding trait.</span>
@@ -670,10 +674,16 @@
         <span class="prelude-val">Ok</span>(<span class="ident">buf</span>)
     }
 
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)))]</span>
+<span class="doccomment">/// The equivalent of the `encode_to_vec` and `to_vec` methods.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Separate trait because the generic parameter `N` would make `Encodable` not object safe.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">EncodableHeapless</span>: <span class="ident">Encodable</span> {
     <span class="doccomment">/// Encode this message as SIMPLE-TLV, appending it to the provided</span>
     <span class="doccomment">/// heapless byte vector.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)))]</span>
     <span class="kw">fn</span> <span class="ident">encode_to_heapless_vec</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">heapless</span>::<span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">buf</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">heapless</span>::<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">N</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">expected_len</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">encoded_length</span>()<span class="question-mark">?</span>.<span class="ident">to_usize</span>();
         <span class="kw">let</span> <span class="ident">current_len</span> <span class="op">=</span> <span class="ident">buf</span>.<span class="ident">len</span>();
@@ -696,8 +706,6 @@
     }
 
     <span class="doccomment">/// Serialize this message as a byte vector.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)]</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;heapless&quot;</span>)))]</span>
     <span class="kw">fn</span> <span class="ident">to_heapless_vec</span><span class="op">&lt;</span><span class="ident">N</span>: <span class="ident">heapless</span>::<span class="ident">ArrayLength</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">heapless</span>::<span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span>, <span class="ident">N</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">heapless</span>::<span class="ident">Vec</span>::<span class="ident">new</span>();
         <span class="self">self</span>.<span class="ident">encode_to_heapless_vec</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>)<span class="question-mark">?</span>;
