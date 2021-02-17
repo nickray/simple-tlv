@@ -159,6 +159,7 @@
 <span id="156">156</span>
 <span id="157">157</span>
 <span id="158">158</span>
+<span id="159">159</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// //! Common handling for types backed by byte slices with enforcement of the</span>
 <span class="comment">// //! format-level length limitation of 65,535 bytes.</span>
@@ -236,6 +237,7 @@
     }
 
     <span class="doccomment">/// Get the SIMPLE-TLV [`Header`] for this [`TaggedSlice`] value</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">unnecessary_wraps</span>)]</span>
     <span class="kw">fn</span> <span class="ident">header</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Header</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">Header</span> {
             <span class="ident">tag</span>: <span class="self">self</span>.<span class="ident">tag</span>(),

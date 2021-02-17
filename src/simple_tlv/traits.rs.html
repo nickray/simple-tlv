@@ -559,6 +559,13 @@
 <span id="556">556</span>
 <span id="557">557</span>
 <span id="558">558</span>
+<span id="559">559</span>
+<span id="560">560</span>
+<span id="561">561</span>
+<span id="562">562</span>
+<span id="563">563</span>
+<span id="564">564</span>
+<span id="565">565</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// pub use der::{Decodable, Encodable};</span>
 <span class="doccomment">//! Trait definitions</span>
@@ -741,6 +748,13 @@
     <span class="ident">TaggedContainer</span>: <span class="ident">Tagged</span> <span class="op">+</span> <span class="ident">Container</span>
 {
     <span class="kw">fn</span> <span class="ident">encoded_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
+        <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">redundant_closure</span>)]</span>
+        <span class="comment">// if we do as clippy tells, we get:</span>
+        <span class="comment">// 183 |         let value_length = self.fields(Length::try_from)?;</span>
+        <span class="comment">//     |                                 ^^^^^^ one type is more general than the other</span>
+        <span class="comment">//     |</span>
+        <span class="comment">//     = note: expected type `FnOnce&lt;(&amp;[&amp;dyn Encodable],)&gt;`</span>
+        <span class="comment">//                found type `FnOnce&lt;(&amp;[&amp;dyn Encodable],)&gt;`</span>
         <span class="kw">let</span> <span class="ident">value_length</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fields</span>(<span class="op">|</span><span class="ident">encodables</span><span class="op">|</span> <span class="ident">Length</span>::<span class="ident">try_from</span>(<span class="ident">encodables</span>))<span class="question-mark">?</span>;
         <span class="ident">Header</span>::<span class="ident">new</span>(<span class="self">Self</span>::<span class="ident">tag</span>(), <span class="ident">value_length</span>)<span class="question-mark">?</span>.<span class="ident">encoded_length</span>() <span class="op">+</span> <span class="ident">value_length</span>
     }
@@ -830,8 +844,8 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
 
-    <span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::{<span class="ident">TryFrom</span>, <span class="ident">TryInto</span>};
-    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Decodable</span>, <span class="ident">Decoder</span>, <span class="ident">Encodable</span>, <span class="ident">Encoder</span>, <span class="ident">Error</span>, <span class="ident">Length</span>, <span class="prelude-ty">Result</span>, <span class="ident">Tag</span>, <span class="ident">TaggedSlice</span>};
+    <span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryFrom</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Decodable</span>, <span class="ident">Encodable</span>, <span class="ident">Error</span>, <span class="prelude-ty">Result</span>, <span class="ident">Tag</span>, <span class="ident">TaggedSlice</span>};
     <span class="kw">use</span> <span class="kw">super</span>::{<span class="ident">Taggable</span>, <span class="ident">Tagged</span>, <span class="ident">Container</span>};
 
     <span class="comment">// The types [u8; 2], [u8; 3], [u8; 4] stand in here for any types for the fields</span>
