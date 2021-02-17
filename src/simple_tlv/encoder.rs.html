@@ -158,8 +158,8 @@
 <span id="155">155</span>
 <span id="156">156</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Encodable</span>, <span class="ident">ErrorKind</span>, <span class="ident">Header</span>, <span class="ident">Length</span>, <span class="ident">nested</span>, <span class="prelude-ty">Result</span>, <span class="ident">Tag</span>};
+<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::{<span class="ident">TryFrom</span>, <span class="ident">TryInto</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Encodable</span>, <span class="ident">ErrorKind</span>, <span class="ident">header</span>::<span class="ident">Header</span>, <span class="ident">Length</span>, <span class="prelude-ty">Result</span>, <span class="ident">Tag</span>};
 
 <span class="doccomment">/// SIMPLE-TLV encoder.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -218,8 +218,8 @@
     }
 
     <span class="doccomment">/// Encode a collection of values which impl the [`Encodable`] trait under a given tag.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nested</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">tag</span>: <span class="ident">Tag</span>, <span class="ident">encodables</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Encodable</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">expected_len</span> <span class="op">=</span> <span class="ident">nested</span>::<span class="ident">encoded_len_inner</span>(<span class="ident">encodables</span>)<span class="question-mark">?</span>;
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">encode_tagged_collection</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">tag</span>: <span class="ident">Tag</span>, <span class="ident">encodables</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Encodable</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">expected_len</span> <span class="op">=</span> <span class="ident">Length</span>::<span class="ident">try_from</span>(<span class="ident">encodables</span>)<span class="question-mark">?</span>;
         <span class="ident">Header</span>::<span class="ident">new</span>(<span class="ident">tag</span>, <span class="ident">expected_len</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">header</span><span class="op">|</span> <span class="ident">header</span>.<span class="ident">encode</span>(<span class="self">self</span>))<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">nested_encoder</span> <span class="op">=</span> <span class="ident">Encoder</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">reserve</span>(<span class="ident">expected_len</span>)<span class="question-mark">?</span>);

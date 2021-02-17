@@ -2,7 +2,7 @@
 <link rel="alternate icon" type="image/png" href="../favicon-16x16.png">
 <link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../simple_tlv/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><p class="location">Crate simple_tlv</p><div class="block version"><p>Version 0.1.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all simple_tlv's items</p></a><div class="block items"><ul><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class="location"></p><script>window.sidebarCurrent = {name: "simple_tlv", ty: "mod", relpath: "../"};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/simple_tlv/lib.rs.html#1-51" title="goto source code">[src]</a></span><span class="in-band">Crate <a class="mod" href="">simple_tlv</a></span></h1><div class="docblock"><h1 id="simple-tlv" class="section-header"><a href="#simple-tlv">simple-tlv</a></h1>
-<p>From ISO 7816-4:2005:</p>
+<p>Implementation of the SIMPLE-TLV serialization format from ISO 7816-4:2005.</p>
 <h3 id="521-simple-tlv-data-objects" class="section-header"><a href="#521-simple-tlv-data-objects">5.2.1 SIMPLE-TLV data objects</a></h3>
 <p>Each SIMPLE-TLV data object shall consist of two or three consecutive fields: a mandatory tag field, a
 mandatory length field and a conditional value field. A record (see 7.3.1) may be a SIMPLE-TLV data object.</p>
@@ -14,14 +14,14 @@ invalid for tag fields. If a record is a SIMPLE-TLV data object, then the tag ma
 <li>If the first byte is not set to 'FF', then the length field consists of a single byte encoding a number from
 zero to 254 and denoted N.</li>
 <li>If the first byte is set to 'FF', then the length field continues on the subsequent two bytes with any
-value encoding a number from zero to 65_535 and denoted N.</li>
+value encoding a number from zero to 65,535 and denoted N.</li>
 </ul>
 </li>
 <li>If N is zero, there is no value field, i.e., the data object is empty. Otherwise (N &gt; 0), the value field
 consists of N consecutive bytes.</li>
 </ul>
-<h2 id="origin" class="section-header"><a href="#origin">Origin</a></h2>
-<p>This library is obviously a remix of <code>RustCrypto/utils/der</code>, with a view towards:</p>
+<h2 id="credits" class="section-header"><a href="#credits">Credits</a></h2>
+<p>This library is a remix of <code>RustCrypto/utils/der</code>, with a view towards:</p>
 <ul>
 <li>not requiring references to ASN.1 (e.g., since SIMPLE-TLV does not have any)</li>
 <li>not requiring allocations or memmoves (like ring, derp, x509:der)</li>
@@ -32,14 +32,17 @@ consists of N consecutive bytes.</li>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.Encoder.html" title="simple_tlv::Encoder struct">Encoder</a></td><td class="docblock-short"><p>SIMPLE-TLV encoder.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.Error.html" title="simple_tlv::Error struct">Error</a></td><td class="docblock-short"><p>Error type</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.Length.html" title="simple_tlv::Length struct">Length</a></td><td class="docblock-short"><p>SIMPLE-TLV-encoded length.</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.Nested.html" title="simple_tlv::Nested struct">Nested</a></td><td class="docblock-short"><p>Nested SIMPLE-TLV data objects.</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.Slice.html" title="simple_tlv::Slice struct">Slice</a></td><td class="docblock-short"><p>Slice of at most <code>Length::max()</code> bytes.</p>
 </td></tr><tr class="module-item"><td><a class="struct" href="struct.Tag.html" title="simple_tlv::Tag struct">Tag</a></td><td class="docblock-short"><p>The tag field consists of a single byte encoding a tag number from 1 to 254. The values '00' and 'FF' are invalid.</p>
-</td></tr><tr class="module-item"><td><a class="struct" href="struct.Tagged.html" title="simple_tlv::Tagged struct">Tagged</a></td><td class="docblock-short"></td></tr><tr class="module-item"><td><a class="struct" href="struct.TaggedSlice.html" title="simple_tlv::TaggedSlice struct">TaggedSlice</a></td><td class="docblock-short"><p>SIMPLE-TLV data object</p>
+</td></tr><tr class="module-item"><td><a class="struct" href="struct.TaggedValue.html" title="simple_tlv::TaggedValue struct">TaggedValue</a></td><td class="docblock-short"><p>SIMPLE-TLV data object</p>
 </td></tr></table><h2 id="enums" class="section-header"><a href="#enums">Enums</a></h2>
 <table><tr class="module-item"><td><a class="enum" href="enum.ErrorKind.html" title="simple_tlv::ErrorKind enum">ErrorKind</a></td><td class="docblock-short"><p>Error type.</p>
 </td></tr></table><h2 id="traits" class="section-header"><a href="#traits">Traits</a></h2>
-<table><tr class="module-item"><td><a class="trait" href="trait.Decodable.html" title="simple_tlv::Decodable trait">Decodable</a></td><td class="docblock-short"><p>Decoding trait.</p>
-</td></tr><tr class="module-item"><td><a class="trait" href="trait.Encodable.html" title="simple_tlv::Encodable trait">Encodable</a></td><td class="docblock-short"><p>Encoding trait.</p>
+<table><tr class="module-item"><td><a class="trait" href="trait.Container.html" title="simple_tlv::Container trait">Container</a></td><td class="docblock-short"><p>Multiple encodables in a container.</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.Decodable.html" title="simple_tlv::Decodable trait">Decodable</a></td><td class="docblock-short"><p>Decoding trait:</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.Encodable.html" title="simple_tlv::Encodable trait">Encodable</a></td><td class="docblock-short"><p>Encoding trait</p>
+</td></tr><tr class="module-item"><td><a class="trait" href="trait.Tagged.html" title="simple_tlv::Tagged trait">Tagged</a></td><td class="docblock-short"><p>Types with an associated SIMPLE-TLV <a href="../simple_tlv/struct.Tag.html" title="Tag"><code>Tag</code></a>.</p>
 </td></tr></table><h2 id="types" class="section-header"><a href="#types">Type Definitions</a></h2>
 <table><tr class="module-item"><td><a class="type" href="type.Result.html" title="simple_tlv::Result type">Result</a></td><td class="docblock-short"><p>Result type.</p>
+</td></tr><tr class="module-item"><td><a class="type" href="type.TaggedSlice.html" title="simple_tlv::TaggedSlice type">TaggedSlice</a></td><td class="docblock-short"><p>Raw SIMPLE-TLV data object: TaggedValue with Slice as value.</p>
 </td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../";window.currentCrate = "simple_tlv";</script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

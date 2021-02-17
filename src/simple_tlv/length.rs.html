@@ -221,6 +221,18 @@
 <span id="218">218</span>
 <span id="219">219</span>
 <span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Length calculations for encoded ASN.1 DER values</span>
 
@@ -232,10 +244,10 @@
 <span class="doccomment">/// By definition, in the range `0..=65535`</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The length field consists of one or three consecutive bytes.</span>
-<span class="doccomment">/// - If the first byte is not set to &#39;FF&#39;, then the length field consists of a single byte encoding a number from</span>
-<span class="doccomment">///   zero to 254 and denoted N.</span>
-<span class="doccomment">/// - If the first byte is set to &#39;FF&#39;, then the length field continues on the subsequent two bytes with any</span>
-<span class="doccomment">///   value encoding a number from zero to 65_535 and denoted N.</span>
+<span class="doccomment">/// - If the first byte is not `0xFF`, then the length field consists of a single byte encoding a number from</span>
+<span class="doccomment">///   zero to 254.</span>
+<span class="doccomment">/// - If the first byte is `0xFF`, then the length field consists of the subsequent two bytes interpreted as</span>
+<span class="doccomment">///   big-endian integer, with any value from zero to 65,535.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>, <span class="ident">Debug</span>, <span class="ident">Default</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>, <span class="ident">PartialOrd</span>, <span class="ident">Ord</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Length</span>(<span class="ident">u16</span>);
 
@@ -245,14 +257,26 @@
         <span class="ident">Length</span>(<span class="number">0</span>)
     }
 
-    <span class="doccomment">/// Get the maximum length supported by this crate</span>
+    <span class="doccomment">/// Get the maximum length supported by SIMPLE-TLV: 65,535.</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">max</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
         <span class="ident">u16</span>::<span class="ident">MAX</span> <span class="kw">as</span> <span class="ident">usize</span>
     }
 
-    <span class="doccomment">/// Convert length to `usize`</span>
+    <span class="doccomment">/// Convert length to `usize`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_usize</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">into</span>()
+    }
+}
+
+<span class="doccomment">/// Calculate the sum of the encoded lengths of the encodables.</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw">dyn</span> <span class="ident">Encodable</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Length</span> {
+    <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
+    <span class="kw">fn</span> <span class="ident">try_from</span>(<span class="ident">encodables</span>: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Encodable</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
+        <span class="ident">encodables</span>
+            .<span class="ident">iter</span>()
+            .<span class="ident">fold</span>(<span class="prelude-val">Ok</span>(<span class="ident">Length</span>::<span class="ident">zero</span>()), <span class="op">|</span><span class="ident">sum</span>, <span class="ident">encodable</span><span class="op">|</span> {
+                <span class="ident">sum</span> <span class="op">+</span> <span class="ident">encodable</span>.<span class="ident">encoded_length</span>()<span class="question-mark">?</span>
+            })
     }
 }
 
@@ -346,7 +370,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Encodable</span> <span class="kw">for</span> <span class="ident">Length</span> {
-    <span class="kw">fn</span> <span class="ident">encoded_len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">encoded_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
             <span class="number">0</span>..<span class="op">=</span><span class="number">0xFE</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Length</span>(<span class="number">1</span>)),
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">Length</span>(<span class="number">3</span>)),

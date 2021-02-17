@@ -56,7 +56,8 @@
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! # simple-tlv</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! From ISO 7816-4:2005:</span>
+<span class="doccomment">//! Implementation of the SIMPLE-TLV serialization format from ISO 7816-4:2005.</span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ### 5.2.1 SIMPLE-TLV data objects</span>
 <span class="doccomment">//! Each SIMPLE-TLV data object shall consist of two or three consecutive fields: a mandatory tag field, a</span>
 <span class="doccomment">//! mandatory length field and a conditional value field. A record (see 7.3.1) may be a SIMPLE-TLV data object.</span>
@@ -66,12 +67,12 @@
 <span class="doccomment">//!   - If the first byte is not set to &#39;FF&#39;, then the length field consists of a single byte encoding a number from</span>
 <span class="doccomment">//!     zero to 254 and denoted N.</span>
 <span class="doccomment">//!   - If the first byte is set to &#39;FF&#39;, then the length field continues on the subsequent two bytes with any</span>
-<span class="doccomment">//!     value encoding a number from zero to 65_535 and denoted N.</span>
+<span class="doccomment">//!     value encoding a number from zero to 65,535 and denoted N.</span>
 <span class="doccomment">//! - If N is zero, there is no value field, i.e., the data object is empty. Otherwise (N &gt; 0), the value field</span>
 <span class="doccomment">//!   consists of N consecutive bytes.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ## Origin</span>
-<span class="doccomment">//! This library is obviously a remix of `RustCrypto/utils/der`, with a view towards:</span>
+<span class="doccomment">//! ## Credits</span>
+<span class="doccomment">//! This library is a remix of `RustCrypto/utils/der`, with a view towards:</span>
 <span class="doccomment">//! - not requiring references to ASN.1 (e.g., since SIMPLE-TLV does not have any)</span>
 <span class="doccomment">//! - not requiring allocations or memmoves (like ring, derp, x509:der)</span>
 <span class="doccomment">//! - adding a type layer on top of SIMPLE-TLV&#39;s byte slice values</span>
@@ -91,20 +92,19 @@
 <span class="kw">mod</span> <span class="ident">error</span>;
 <span class="kw">mod</span> <span class="ident">header</span>;
 <span class="kw">mod</span> <span class="ident">length</span>;
-<span class="kw">mod</span> <span class="ident">nested</span>;
+<span class="kw">mod</span> <span class="ident">slice</span>;
 <span class="kw">mod</span> <span class="ident">tag</span>;
-<span class="kw">mod</span> <span class="ident">tagged_slice</span>;
+<span class="kw">mod</span> <span class="ident">tagged</span>;
 <span class="kw">mod</span> <span class="ident">traits</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">tagged_slice</span>::<span class="ident">TaggedSlice</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">decoder</span>::<span class="ident">Decoder</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">encoder</span>::<span class="ident">Encoder</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">error</span>::{<span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="prelude-ty">Result</span>};
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use</span> <span class="ident">header</span>::<span class="ident">Header</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">length</span>::<span class="ident">Length</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">nested</span>::<span class="ident">Nested</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">slice</span>::<span class="ident">Slice</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">tag</span>::<span class="ident">Tag</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">traits</span>::{<span class="ident">Decodable</span>, <span class="ident">Encodable</span>, <span class="ident">Tagged</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">tagged</span>::{<span class="ident">TaggedSlice</span>, <span class="ident">TaggedValue</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">traits</span>::{<span class="ident">Container</span>, <span class="ident">Decodable</span>, <span class="ident">Encodable</span>, <span class="ident">Tagged</span>};
 
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "simple_tlv";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

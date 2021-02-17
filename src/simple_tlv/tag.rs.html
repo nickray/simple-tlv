@@ -65,15 +65,18 @@
 <span id="62">62</span>
 <span id="63">63</span>
 <span id="64">64</span>
+<span id="65">65</span>
+<span id="66">66</span>
+<span id="67">67</span>
+<span id="68">68</span>
+<span id="69">69</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">core</span>::{<span class="ident">convert</span>::<span class="ident">TryFrom</span>, <span class="ident">fmt</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Decodable</span>, <span class="ident">Decoder</span>, <span class="ident">Encodable</span>, <span class="ident">Encoder</span>, <span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="ident">Length</span>, <span class="prelude-ty">Result</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Decodable</span>, <span class="ident">Decoder</span>, <span class="ident">Encodable</span>, <span class="ident">Encoder</span>, <span class="ident">Error</span>, <span class="ident">ErrorKind</span>, <span class="ident">Length</span>, <span class="prelude-ty">Result</span>, <span class="ident">TaggedValue</span>};
 
 <span class="doccomment">/// The tag field consists of a single byte encoding a tag number from 1 to 254. The values &#39;00&#39; and &#39;FF&#39; are invalid.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Eq</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Tag</span>(<span class="ident">u8</span>);
-
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="ident">MEANINGLESS_TAG</span>: <span class="ident">Tag</span> <span class="op">=</span> <span class="ident">Tag</span>(<span class="number">42</span>);
 
 <span class="kw">impl</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Tag</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
@@ -100,6 +103,13 @@
             .<span class="ident">into</span>())
         }
     }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_value</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TaggedValue</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span> {
+        <span class="ident">TaggedValue</span>::<span class="ident">new</span>(<span class="self">self</span>, <span class="ident">value</span>)
+    }
+    <span class="comment">// fn tagged(&amp;self, tag: Tag) -&gt; TaggedValue&lt;&amp;Self&gt; {</span>
+    <span class="comment">//     TaggedValue::new(tag, self)</span>
+    <span class="comment">// }</span>
 }
 
 <span class="kw">impl</span> <span class="ident">Decodable</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Tag</span> {
@@ -109,7 +119,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Encodable</span> <span class="kw">for</span> <span class="ident">Tag</span> {
-    <span class="kw">fn</span> <span class="ident">encoded_len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">encoded_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="number">1u8</span>.<span class="ident">into</span>())
     }
 
