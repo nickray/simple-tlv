@@ -1,0 +1,3 @@
+(function() {var implementors = {};
+implementors["simple_tlv"] = [{"text":"impl Clone for Error","synthetic":false,"types":[]},{"text":"impl Clone for ErrorKind","synthetic":false,"types":[]},{"text":"impl Clone for Length","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; Clone for Nested&lt;'a&gt;","synthetic":false,"types":[]},{"text":"impl Clone for Tag","synthetic":false,"types":[]},{"text":"impl&lt;'a&gt; Clone for TaggedSlice&lt;'a&gt;","synthetic":false,"types":[]},{"text":"impl&lt;'a, E:&nbsp;Clone&gt; Clone for Tagged&lt;'a, E&gt;","synthetic":false,"types":[]}];
+if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()
