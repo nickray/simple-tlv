@@ -577,6 +577,10 @@
 <span id="574">574</span>
 <span id="575">575</span>
 <span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// pub use der::{Decodable, Encodable};</span>
 <span class="doccomment">//! Trait definitions</span>
@@ -732,12 +736,16 @@
 <span class="comment">// }</span>
 
 <span class="doccomment">/// Types with an associated SIMPLE-TLV [`Tag`].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A tagged type implementing `Container` has a blanked implementation of `Encodable`.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Tagged</span> {
     <span class="doccomment">/// The tag</span>
     <span class="kw">fn</span> <span class="ident">tag</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Tag</span>;
 }
 
 <span class="doccomment">/// Multiple encodables in a container.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// A container implementing `Tagged` has a blanked implementation of `Encodable`.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Container</span> {
     <span class="doccomment">/// Call the provided function with a slice of [`Encodable`] trait objects</span>
     <span class="doccomment">/// representing the fields of this message.</span>
@@ -750,9 +758,9 @@
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">Encodable</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">TC</span><span class="op">&gt;</span> <span class="ident">Encodable</span> <span class="kw">for</span> <span class="ident">TC</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">TaggedContainer</span><span class="op">&gt;</span> <span class="ident">Encodable</span> <span class="kw">for</span> <span class="ident">TaggedContainer</span>
 <span class="kw">where</span>
-    <span class="ident">TC</span>: <span class="ident">Tagged</span> <span class="op">+</span> <span class="ident">Container</span>,
+    <span class="ident">TaggedContainer</span>: <span class="ident">Tagged</span> <span class="op">+</span> <span class="ident">Container</span>
 {
     <span class="kw">fn</span> <span class="ident">encoded_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">value_length</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">fields</span>(<span class="op">|</span><span class="ident">encodables</span><span class="op">|</span> <span class="ident">Length</span>::<span class="ident">try_from</span>(<span class="ident">encodables</span>))<span class="question-mark">?</span>;
