@@ -96,7 +96,7 @@
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">alloc</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;derive&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">simple_tlv_derive</span>::<span class="ident">UntaggedCollection</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">simple_tlv_derive</span>::{<span class="ident">Decodable</span>, <span class="ident">Encodable</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">std</span>;
