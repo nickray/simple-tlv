@@ -179,6 +179,13 @@
 <span id="176">176</span>
 <span id="177">177</span>
 <span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
+<span id="185">185</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">Decodable</span>, <span class="ident">ErrorKind</span>, <span class="ident">Length</span>, <span class="prelude-ty">Result</span>};
@@ -222,6 +229,13 @@
         <span class="kw">let</span> <span class="ident">tagged</span>: <span class="kw">crate</span>::<span class="ident">TaggedSlice</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>;
         <span class="ident">tagged</span>.<span class="ident">tag</span>().<span class="ident">assert_eq</span>(<span class="ident">tag</span>)<span class="question-mark">?</span>;
         <span class="self">Self</span>::<span class="ident">new</span>(<span class="ident">tagged</span>.<span class="ident">as_bytes</span>()).<span class="ident">decode</span>()
+    }
+
+    <span class="doccomment">/// Decode a TaggedSlice with tag checked to be as expected, returning the value</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">decode_tagged_slice</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">tag</span>: <span class="kw">crate</span>::<span class="ident">Tag</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">tagged</span>: <span class="kw">crate</span>::<span class="ident">TaggedSlice</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">decode</span>()<span class="question-mark">?</span>;
+        <span class="ident">tagged</span>.<span class="ident">tag</span>().<span class="ident">assert_eq</span>(<span class="ident">tag</span>)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(<span class="ident">tagged</span>.<span class="ident">as_bytes</span>())
     }
 
     <span class="doccomment">/// Return an error with the given [`ErrorKind`], annotating it with</span>

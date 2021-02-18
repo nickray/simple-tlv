@@ -570,6 +570,18 @@
 <span id="567">567</span>
 <span id="568">568</span>
 <span id="569">569</span>
+<span id="570">570</span>
+<span id="571">571</span>
+<span id="572">572</span>
+<span id="573">573</span>
+<span id="574">574</span>
+<span id="575">575</span>
+<span id="576">576</span>
+<span id="577">577</span>
+<span id="578">578</span>
+<span id="579">579</span>
+<span id="580">580</span>
+<span id="581">581</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// pub use der::{Decodable, Encodable};</span>
 <span class="doccomment">//! Trait definitions</span>
@@ -817,27 +829,39 @@
 <span class="comment">//     }</span>
 <span class="comment">// }</span>
 
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Encodable</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
+    <span class="kw">fn</span> <span class="ident">encoded_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
+        <span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;
+        <span class="self">self</span>.<span class="ident">len</span>().<span class="ident">try_into</span>()
+    }
+
+    <span class="doccomment">/// Encode this value as SIMPLE-TLV using the provided [`Encoder`].</span>
+    <span class="kw">fn</span> <span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">encoder</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Encoder</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="ident">encoder</span>.<span class="ident">bytes</span>(<span class="self">self</span>)
+    }
+}
+
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">impl_array</span> {
     ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span>:<span class="ident">literal</span>),<span class="kw-2">*</span>) <span class="op">=</span><span class="op">&gt;</span> {
         $(
-        <span class="kw">impl</span> <span class="ident">Encodable</span> <span class="kw">for</span> [<span class="ident">u8</span>; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span>] {
-            <span class="kw">fn</span> <span class="ident">encoded_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
-                <span class="prelude-val">Ok</span>((<span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span> <span class="kw">as</span> <span class="ident">u8</span>).<span class="ident">into</span>())
+            <span class="kw">impl</span> <span class="ident">Encodable</span> <span class="kw">for</span> [<span class="ident">u8</span>; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span>] {
+                <span class="kw">fn</span> <span class="ident">encoded_length</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Length</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Ok</span>((<span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span> <span class="kw">as</span> <span class="ident">u8</span>).<span class="ident">into</span>())
+                }
+
+                <span class="doccomment">/// Encode this value as SIMPLE-TLV using the provided [`Encoder`].</span>
+                <span class="kw">fn</span> <span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">encoder</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Encoder</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+                    <span class="ident">encoder</span>.<span class="ident">bytes</span>(<span class="self">self</span>.<span class="ident">as_ref</span>())
+                }
             }
 
-            <span class="doccomment">/// Encode this value as SIMPLE-TLV using the provided [`Encoder`].</span>
-            <span class="kw">fn</span> <span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">encoder</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Encoder</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-                <span class="ident">encoder</span>.<span class="ident">bytes</span>(<span class="self">self</span>.<span class="ident">as_ref</span>())
+            <span class="kw">impl</span> <span class="ident">Decodable</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> <span class="kw">for</span> [<span class="ident">u8</span>; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span>] {
+                <span class="kw">fn</span> <span class="ident">decode</span>(<span class="ident">decoder</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Decoder</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+                    <span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;
+                    <span class="kw">let</span> <span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="ident">decoder</span>.<span class="ident">bytes</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span> <span class="kw">as</span> <span class="ident">u8</span>)<span class="question-mark">?</span>;
+                    <span class="prelude-val">Ok</span>(<span class="ident">bytes</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>())
+                }
             }
-        }
-
-        <span class="kw">impl</span> <span class="ident">Decodable</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> <span class="kw">for</span> [<span class="ident">u8</span>; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span>] {
-            <span class="kw">fn</span> <span class="ident">decode</span>(<span class="ident">decoder</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Decoder</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-                <span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;
-                <span class="kw">let</span> <span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] <span class="op">=</span> <span class="ident">decoder</span>.<span class="ident">bytes</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">N</span> <span class="kw">as</span> <span class="ident">u8</span>)<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>(<span class="ident">bytes</span>.<span class="ident">try_into</span>().<span class="ident">unwrap</span>())
-            }
-        }
         )<span class="op">*</span>
     }
 }
@@ -904,10 +928,10 @@
         {
             <span class="comment">// both approaches equivalent</span>
             <span class="ident">field_encoder</span>(<span class="kw-2">&amp;</span>[
-                <span class="kw-2">&amp;</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x11</span>).<span class="ident">unwrap</span>().<span class="ident">with_value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">x</span>)),
+                <span class="kw-2">&amp;</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x11</span>).<span class="ident">unwrap</span>().<span class="ident">with_value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">x</span>.<span class="ident">as_ref</span>())),
                 <span class="comment">// &amp;self.x.tagged(Tag::try_from(0x11).unwrap()),</span>
-                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">y</span>.<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x22</span>).<span class="ident">unwrap</span>()),
-                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">z</span>.<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x33</span>).<span class="ident">unwrap</span>()),
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">y</span>.<span class="ident">as_ref</span>().<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x22</span>).<span class="ident">unwrap</span>()),
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">z</span>.<span class="ident">as_ref</span>().<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x33</span>).<span class="ident">unwrap</span>()),
 
             ])
         }
@@ -969,7 +993,7 @@
         {
             <span class="ident">field_encoder</span>(<span class="kw-2">&amp;</span>[
                 <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">s</span>.<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x1</span>).<span class="ident">unwrap</span>()),
-                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">t</span>.<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x2</span>).<span class="ident">unwrap</span>()),
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">t</span>.<span class="ident">as_ref</span>().<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x2</span>).<span class="ident">unwrap</span>()),
             ])
         }
     }
@@ -1037,7 +1061,7 @@
         {
             <span class="ident">field_encoder</span>(<span class="kw-2">&amp;</span>[
                 <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">s</span>,
-                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">t</span>.<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x2</span>).<span class="ident">unwrap</span>()),
+                <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">t</span>.<span class="ident">as_ref</span>().<span class="ident">tagged</span>(<span class="ident">Tag</span>::<span class="ident">try_from</span>(<span class="number">0x2</span>).<span class="ident">unwrap</span>()),
             ])
         }
     }
